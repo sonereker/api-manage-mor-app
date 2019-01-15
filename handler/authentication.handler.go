@@ -14,7 +14,7 @@ var jwtSecret = []byte("thepolyglotdeveloper")
 // User Dto
 type User struct {
 	ID       string `json:"id"`
-	Username string `json:"username"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
@@ -62,13 +62,14 @@ func ValidateToken(next http.HandlerFunc) http.HandlerFunc {
 
 // Authenticate is the handler to authenticate user and create new token
 var AuthenticationHandler = http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+
 	var user User
 	_ = json.NewDecoder(request.Body).Decode(&user)
 
 	fmt.Println(user)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": user.Username,
+		"email":    user.Email,
 		"password": user.Password,
 	})
 
