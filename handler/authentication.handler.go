@@ -78,6 +78,6 @@ var AuthenticationHandler = http.HandlerFunc(func(w http.ResponseWriter, request
 		fmt.Println(err)
 	}
 
-	w.Header().Set("content-type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(JwtToken{Token: tokenString})
 })
