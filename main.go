@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/sonereker/api-manage-mor-app/handlers"
+	"github.com/sonereker/api-manage-mor-app/handler"
 	"log"
 	"net/http"
 	"os"
@@ -12,11 +12,11 @@ import (
 func main() {
 	r := mux.NewRouter()
 
-	r.Handle("/authenticate", handlers.AuthenticationHandler).Methods("POST")
-	r.Handle("/collection", handlers.ValidateToken(handlers.ViewCollectionHandler)).Methods("GET")
-	r.Handle("/collection", handlers.ValidateToken(handlers.AddWorkHandler)).Methods("POST")
-	r.Handle("/collection/work/{id}", handlers.ValidateToken(handlers.UpdateWorkHandler)).Methods("PUT")
-	r.Handle("/collection/work/{id}", handlers.ValidateToken(handlers.DeleteWorkHandler)).Methods("DELETE")
+	r.HandleFunc("/authenticate", handler.AuthenticationHandler).Methods("POST")
+	r.HandleFunc("/collection", handler.ValidateToken(handler.ViewCollectionHandler)).Methods("GET")
+	r.HandleFunc("/collection", handler.ValidateToken(handler.AddWorkHandler)).Methods("POST")
+	r.HandleFunc("/collection/work/{id}", handler.ValidateToken(handler.UpdateWorkHandler)).Methods("PUT")
+	r.HandleFunc("/collection/work/{id}", handler.ValidateToken(handler.DeleteWorkHandler)).Methods("DELETE")
 
 	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"})
 	origins := handlers.AllowedOrigins([]string{"*"})
