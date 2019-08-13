@@ -1,4 +1,4 @@
-package handler
+package handlers
 
 import (
 	"encoding/json"
@@ -37,14 +37,14 @@ func ValidateToken(next http.HandlerFunc) http.HandlerFunc {
 		} else {
 			bearerToken := strings.Split(authorizationHeader, " ")
 			if len(bearerToken) == 2 {
-				token, error := jwt.Parse(bearerToken[1], func(token *jwt.Token) (interface{}, error) {
+				token, err := jwt.Parse(bearerToken[1], func(token *jwt.Token) (interface{}, error) {
 					if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 						return nil, fmt.Errorf("there was an error")
 					}
 					return jwtSecret, nil
 				})
-				if error != nil {
-					_ = json.NewEncoder(w).Encode(Exception{Message: error.Error()})
+				if err != nil {
+					_ = json.NewEncoder(w).Encode(Exception{Message: err.Error()})
 					return
 				}
 				if token.Valid {
@@ -61,7 +61,7 @@ func ValidateToken(next http.HandlerFunc) http.HandlerFunc {
 }
 
 // Authenticate is the handler to authenticate user and create new token
-var AuthenticationHandler = http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+func AuthenticationHandler(w http.ResponseWriter, request *http.Request) {
 
 	var user User
 	_ = json.NewDecoder(request.Body).Decode(&user)
@@ -80,4 +80,4 @@ var AuthenticationHandler = http.HandlerFunc(func(w http.ResponseWriter, request
 
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(JwtToken{Token: tokenString})
-})
+}
