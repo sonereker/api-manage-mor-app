@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-var jwtSecret = []byte("thepolyglotdeveloper")
+var jwtSecret = []byte("2AB89F28-0DF2-4D47-93AD-97810483C515")
 
 // User Dto
 type User struct {
@@ -61,7 +61,7 @@ func ValidateToken(next http.HandlerFunc) http.HandlerFunc {
 }
 
 // Authenticate is the handler to authenticate user and create new token
-func AuthenticationHandler(w http.ResponseWriter, request *http.Request) {
+func Authenticate(w http.ResponseWriter, request *http.Request) {
 
 	var user User
 	_ = json.NewDecoder(request.Body).Decode(&user)
