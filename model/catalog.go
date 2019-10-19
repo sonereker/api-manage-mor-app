@@ -4,8 +4,9 @@ import "github.com/jinzhu/gorm"
 
 type Catalog struct {
 	gorm.Model
-	Name        string `gorm:"type:varchar(255)" json:"Name"`
-	Description string `json:"Description"`
+	UUID        string `gorm:"type:varchar(255)" json:"uuid"`
+	Name        string `gorm:"type:varchar(255)" json:"name"`
+	Description string `json:"description"`
 	AccountID   int
 	Account     Account
 }

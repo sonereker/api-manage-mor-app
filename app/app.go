@@ -46,6 +46,9 @@ func (a *App) setRouters() {
 	c := v1.PathPrefix("/catalogs").Subrouter()
 	c.HandleFunc("", handler.ValidateToken(a.GetAllCatalogs)).Methods("GET")
 	c.HandleFunc("", handler.ValidateToken(a.CreateCatalog)).Methods("POST")
+	c.HandleFunc("/{uuid}", handler.ValidateToken(a.GetCatalog)).Methods("GET")
+	c.HandleFunc("/{uuid}", handler.ValidateToken(a.UpdateCatalog)).Methods("PUT")
+	c.HandleFunc("/{uuid}", handler.ValidateToken(a.DeleteCatalog)).Methods("DELETE")
 }
 
 func (a *App) Run(host string) {
@@ -70,4 +73,16 @@ func (a *App) GetAllCatalogs(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) CreateCatalog(w http.ResponseWriter, r *http.Request) {
 	handler.CreateCatalog(a.DB, w, r)
+}
+
+func (a *App) GetCatalog(w http.ResponseWriter, r *http.Request) {
+	handler.GetCatalog(a.DB, w, r)
+}
+
+func (a *App) UpdateCatalog(w http.ResponseWriter, r *http.Request) {
+	handler.UpdateCatalog(a.DB, w, r)
+}
+
+func (a *App) DeleteCatalog(w http.ResponseWriter, r *http.Request) {
+	handler.DeleteCatalog(a.DB, w, r)
 }

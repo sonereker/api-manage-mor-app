@@ -5,8 +5,8 @@ import "github.com/jinzhu/gorm"
 type Account struct {
 	gorm.Model
 	Email    string `gorm:"unique"`
-	Password string `json:"Password"`
-	Enabled  bool   `json:"Enabled"`
+	Password string `json:"password"`
+	Enabled  bool   `json:"enabled"`
 }
 
 func (a *Account) Disable() {
