@@ -20,11 +20,10 @@ type App struct {
 }
 
 func (a *App) Initialize(config *config.Config) {
-	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		config.DB.Host,
-		config.DB.Port,
+	dbInfo := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=%s",
 		config.DB.Username,
 		config.DB.Password,
+		config.DB.Host,
 		config.DB.Name,
 		config.DB.SSLMode,
 	)
@@ -34,7 +33,7 @@ func (a *App) Initialize(config *config.Config) {
 		log.Fatal("Could not connect database: ", err)
 	}
 
-	a.DB = model.DBMigrate(db)
+	a.DB = DBMigrate(db)
 	a.Router = mux.NewRouter()
 	a.setRouters()
 }
@@ -43,8 +42,10 @@ func (a *App) setRouters() {
 	v1 := a.Router.PathPrefix("/v1").Subrouter()
 	v1.HandleFunc("/authenticate", handler.Authenticate).Methods("POST")
 	v1.HandleFunc("/accounts", handler.Register(a.DB)).Methods("POST")
-	c := v1.PathPrefix("/collection").Subrouter()
-	c.HandleFunc("/", handler.ValidateToken(handler.ViewCollection)).Methods("GET")
+
+	c := v1.PathPrefix("/catalogs").Subrouter()
+	c.HandleFunc("", handler.ValidateToken(a.GetAllCatalogs)).Methods("GET")
+	c.HandleFunc("", handler.ValidateToken(a.CreateCatalog)).Methods("POST")
 }
 
 func (a *App) Run(host string) {
@@ -53,4 +54,20 @@ func (a *App) Run(host string) {
 	methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS", "DELETE"})
 
 	log.Fatal(http.ListenAndServe(host, handlers.LoggingHandler(os.Stdout, handlers.CORS(headers, origins, methods)(a.Router))))
+}
+
+// DBMigrate will create and migrate the tables, and then make the some relationships if necessary
+func DBMigrate(db *gorm.DB) *gorm.DB {
+	db.AutoMigrate(&model.Account{})
+	db.AutoMigrate(&model.Catalog{})
+	return db
+}
+
+// Handlers to manage Catalog Data
+func (a *App) GetAllCatalogs(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllCatalogs(a.DB, w, r)
+}
+
+func (a *App) CreateCatalog(w http.ResponseWriter, r *http.Request) {
+	handler.CreateCatalog(a.DB, w, r)
 }

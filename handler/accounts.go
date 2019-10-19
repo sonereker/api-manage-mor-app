@@ -24,7 +24,5 @@ func Register(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		respondJSON(w, http.StatusCreated, employee)
-		// here, you have access to the db
-		// ...
 	}
 }
