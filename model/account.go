@@ -4,7 +4,7 @@ import "github.com/jinzhu/gorm"
 
 type Account struct {
 	gorm.Model
-	Email    string `gorm:"unique"`
+	Email    string `json:"email" gorm:"unique"`
 	Password string `json:"password"`
 	Enabled  bool   `json:"enabled"`
 }

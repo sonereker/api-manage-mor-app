@@ -23,7 +23,6 @@ type JwtToken struct {
 	Token string `json:"token"`
 }
 
-// Exception
 type Exception struct {
 	Message string `json:"message"`
 }

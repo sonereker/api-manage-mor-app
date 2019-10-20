@@ -35,8 +35,8 @@ func CreateCatalog(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func GetCatalog(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	uuid := vars["uuid"]
-	catalog := getCatalogOr404(db, uuid, w, r)
+	id := vars["id"]
+	catalog := getCatalogOr404(db, id, w, r)
 	if catalog == nil {
 		return
 	}
@@ -83,7 +83,7 @@ func DeleteCatalog(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 
 func getCatalogOr404(db *gorm.DB, uuid string, w http.ResponseWriter, r *http.Request) *model.Catalog {
 	catalog := model.Catalog{}
-	if err := db.First(&catalog, model.Catalog{UUID: uuid}).Error; err != nil {
+	if err := db.First(&catalog, uuid).Error; err != nil {
 		respondError(w, http.StatusNotFound, err.Error())
 		return nil
 	}

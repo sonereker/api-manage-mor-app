@@ -46,9 +46,15 @@ func (a *App) setRouters() {
 	c := v1.PathPrefix("/catalogs").Subrouter()
 	c.HandleFunc("", handler.ValidateToken(a.GetAllCatalogs)).Methods("GET")
 	c.HandleFunc("", handler.ValidateToken(a.CreateCatalog)).Methods("POST")
-	c.HandleFunc("/{uuid}", handler.ValidateToken(a.GetCatalog)).Methods("GET")
-	c.HandleFunc("/{uuid}", handler.ValidateToken(a.UpdateCatalog)).Methods("PUT")
-	c.HandleFunc("/{uuid}", handler.ValidateToken(a.DeleteCatalog)).Methods("DELETE")
+	c.HandleFunc("/{id}", handler.ValidateToken(a.GetCatalog)).Methods("GET")
+	c.HandleFunc("/{id}", handler.ValidateToken(a.UpdateCatalog)).Methods("PUT")
+	c.HandleFunc("/{id}", handler.ValidateToken(a.DeleteCatalog)).Methods("DELETE")
+
+	c.HandleFunc("/{id}/assets", handler.ValidateToken(a.GetAllAssets)).Methods("GET")
+	c.HandleFunc("/{id}/assets/new", handler.ValidateToken(a.CreateAsset)).Methods("POST")
+	c.HandleFunc("/{id}/assets/{assetId}", handler.ValidateToken(a.GetAsset)).Methods("GET")
+	c.HandleFunc("/{id}/assets/{assetId}", handler.ValidateToken(a.UpdateAsset)).Methods("PUT")
+	c.HandleFunc("/{id}/assets/{assetId}", handler.ValidateToken(a.DeleteAsset)).Methods("DELETE")
 }
 
 func (a *App) Run(host string) {
@@ -63,6 +69,7 @@ func (a *App) Run(host string) {
 func DBMigrate(db *gorm.DB) *gorm.DB {
 	db.AutoMigrate(&model.Account{})
 	db.AutoMigrate(&model.Catalog{})
+	db.AutoMigrate(&model.Asset{})
 	return db
 }
 
@@ -85,4 +92,25 @@ func (a *App) UpdateCatalog(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) DeleteCatalog(w http.ResponseWriter, r *http.Request) {
 	handler.DeleteCatalog(a.DB, w, r)
+}
+
+// Handlers to manage Asset Data
+func (a *App) GetAllAssets(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllAssets(a.DB, w, r)
+}
+
+func (a *App) CreateAsset(w http.ResponseWriter, r *http.Request) {
+	handler.CreateAsset(a.DB, w, r)
+}
+
+func (a *App) GetAsset(w http.ResponseWriter, r *http.Request) {
+	handler.GetAsset(a.DB, w, r)
+}
+
+func (a *App) UpdateAsset(w http.ResponseWriter, r *http.Request) {
+	handler.UpdateAsset(a.DB, w, r)
+}
+
+func (a *App) DeleteAsset(w http.ResponseWriter, r *http.Request) {
+	handler.DeleteAsset(a.DB, w, r)
 }
