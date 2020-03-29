@@ -74,5 +74,4 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
-api-manage-mor-app
 .DS_Store

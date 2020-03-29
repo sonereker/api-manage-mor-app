@@ -2,9 +2,10 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/jinzhu/gorm"
-	"github.com/sonereker/api-manage-mor-app/model"
 	"net/http"
+
+	"github.com/jinzhu/gorm"
+	"github.com/sonereker/kule-app-api/model"
 )
 
 func Register(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {

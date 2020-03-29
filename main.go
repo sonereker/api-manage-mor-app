@@ -2,8 +2,8 @@ package main
 
 import (
 	_ "github.com/lib/pq"
-	"github.com/sonereker/api-manage-mor-app/app"
-	"github.com/sonereker/api-manage-mor-app/config"
+	"github.com/sonereker/kule-app-api/app"
+	"github.com/sonereker/kule-app-api/config"
 )
 
 func main() {

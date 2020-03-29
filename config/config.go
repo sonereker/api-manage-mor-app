@@ -27,7 +27,7 @@ func GetConfig() *Config {
 			Dialect:  "postgres",
 			Username: "postgres",
 			Password: "",
-			Name:     "manage_mor",
+			Name:     "kule_app_dev",
 			SSLMode:  "disable",
 		},
 		App: &AppConfig{Host: "localhost:4000"},

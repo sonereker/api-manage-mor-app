@@ -1,4 +1,4 @@
-module github.com/sonereker/api-manage-mor-app
+module github.com/sonereker/kule-app-api
 
 go 1.12
 
